@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+// static blog post metadata
 type Metadata = {
   title: string
   publishedAt: string
@@ -8,28 +9,40 @@ type Metadata = {
   image?: string
 }
 
+// Parse frontmatter from MDX file
 function parseFrontmatter(fileContent: string) {
+  // matadata is between two sets of '---'
   let frontmatterRegex = /---\s*([\s\S]*?)\s*---/
+  // match[1] is the metadata block
   let match = frontmatterRegex.exec(fileContent)
   let frontMatterBlock = match![1]
+  // content is everything after the metadata block
   let content = fileContent.replace(frontmatterRegex, '').trim()
+  // split metadata block into lines
   let frontMatterLines = frontMatterBlock.trim().split('\n')
   let metadata: Partial<Metadata> = {}
 
+  // parse metadata key value pairs
   frontMatterLines.forEach((line) => {
+    // split line into key and value
     let [key, ...valueArr] = line.split(': ')
+    // join value array into a string
     let value = valueArr.join(': ').trim()
-    value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
+    // remove quotes from value
+    value = value.replace(/^['"](.*)['"]$/, '$1')
+    // add key value pair to metadata object
     metadata[key.trim() as keyof Metadata] = value
   })
 
   return { metadata: metadata as Metadata, content }
 }
 
+// Get all MDX files in a directory
 function getMDXFiles(dir: string) {
   return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
 }
 
+// Read MDX file and parse frontmatter
 function readMDXFile(filePath: string) {
   let rawContent = fs.readFileSync(filePath, 'utf-8')
   return parseFrontmatter(rawContent)
