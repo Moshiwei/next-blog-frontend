@@ -51,6 +51,7 @@ export function generateMetadata({ params }) {
   }
 }
 
+// params is an object with the route parameters for this route.
 export default function Blog({ params }) {
   console.log(params)
   let post = getBlogPosts().find((post) => post.slug === params.slug)
