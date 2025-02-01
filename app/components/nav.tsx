@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import SignIn from '@/components/sign-in'
 
 const navItems = {
   '/': {
@@ -20,7 +21,7 @@ export function Navbar() {
           className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
           id="nav"
         >
-          <div className="flex flex-row space-x-0 pr-10">
+          <div className="flex flex-row">
             {Object.entries(navItems).map(([path, { name }]) => {
               return (
                 <Link
@@ -32,6 +33,9 @@ export function Navbar() {
                 </Link>
               )
             })}
+          </div>
+          <div className='flex flex-row md:ml-auto'>
+            <SignIn></SignIn>
           </div>
         </nav>
       </div>
